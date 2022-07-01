@@ -6,23 +6,23 @@ loaderVersion="[3,)" # Require at least 3.x
 license='LGPL'
 
 [[mods]]
-modId="examplemod"
+modId="liz_lib"
 version="${file.jarVersion}"
-displayName="ExampleMod"
-credits="The ExampleMod dev team"
-authors="ExampleModAuthor"
+displayName="Liz's Lib"
+credits=""
+authors="Liz"
 description='''
-Example mod that uses Kotlin for Forge.
+A library mod for Liz's mods
 '''
-[[dependencies.examplemod]]
+[[dependencies.liz_lib]]
     modId="forge"
     mandatory=true
-    versionRange="[39,)"
+    versionRange="[40,)"
     ordering="NONE"
     side="BOTH"
-[[dependencies.examplemod]]
+[[dependencies.liz_lib]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.1]"
+    versionRange="[1.18.2]"
     ordering="NONE"
     side="BOTH"
