@@ -1,4 +1,4 @@
-package example.examplemod
+package io.github.elizabethlfransen.lizlib
 
 import net.minecraftforge.fml.common.Mod
 
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.Mod
  *
  * An example for blocks is in the `blocks` package of this mod.
  */
-@Mod(ExampleMod.ID)
-object ExampleMod {
+@Mod(LizLib.ID)
+object LizLib {
     const val ID = "liz_lib"
 }
