@@ -6,28 +6,46 @@ import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 import java.util.function.Supplier
 
+/**
+ * Builder for [RegisterHelper]
+ */
 class RegisterHelperBuilder {
     private val registerProviders = mutableMapOf<Class<*>, RegisterProvider<*>>()
 
+    /**
+     * Adds [register] of type [T] to be used by helper
+     */
     fun <T> addRegister(type: Class<T>, register: RegisterProvider<T>) {
         registerProviders[type] = register
     }
 
+    /**
+     * Add [register] of type [T] to be used by helper
+     */
     inline fun <reified T> addRegister(noinline register: RegisterProvider<T>)
         = addRegister(T::class.java, register)
 
+    /**
+     * Adds a forge register for [registry] from [ForgeRegistries].
+     */
     inline fun <reified T: IForgeRegistryEntry<T>> addForgeRegister(registry: IForgeRegistry<T>) =
         addRegister(T::class.java) { modId ->
             DeferredRegister.create(registry, modId)
         }
 
-    inline fun <reified T : IForgeRegistryEntry<T>> addForgeRegister(supplier: Supplier<IForgeRegistry<T>>) =
+    /**
+     * Adds a forge register for [registry] from [ForgeRegistries].
+     * [registry] is lazily called when used by the helper.
+     */
+    inline fun <reified T : IForgeRegistryEntry<T>> addForgeRegister(registry: Supplier<IForgeRegistry<T>>) =
         addRegister(T::class.java) {modId ->
-            DeferredRegister.create(supplier.get(), modId)
+            DeferredRegister.create(registry.get(), modId)
         }
 
 
-
+    /**
+     * Adds all registers for all forge registries defined in [ForgeRegistries]
+     */
     fun addForgeRegisters() {
         addForgeRegister(ForgeRegistries.BLOCKS)
         addForgeRegister(ForgeRegistries.FLUIDS)
@@ -63,6 +81,9 @@ class RegisterHelperBuilder {
         addForgeRegister(ForgeRegistries.WORLD_TYPES)
     }
 
+    /**
+     * Builds a [RegisterHelper] for a given mod, specified by [modId].
+     */
     fun build(modId: String): RegisterHelper {
         return RegisterHelper(
             modId,
@@ -71,6 +92,19 @@ class RegisterHelperBuilder {
     }
 }
 
+/**
+ * Builder function for creating a [RegisterHelper].
+ *
+ * Example Usage:
+ * ```
+ * registerHelper(MyMod.Id) {
+ *   addForgeRegisters()
+ *   addRegister { modId ->
+ *     DeferredRegister.create(myRegistry, modId)
+ *   }
+ * }
+ * ```
+ */
 fun registerHelper(modId: String, init: RegisterHelperBuilder.() -> Unit): RegisterHelper
 {
     return RegisterHelperBuilder()

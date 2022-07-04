@@ -4,7 +4,8 @@ import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.DeferredRegister
 
 /**
- * Used to quickly get registers on demand
+ * Used to quickly get registers on demand.
+ * A RegisterHelper is tied to a specific mod, specified by [modId] and a supplied map for getting a register by type.
  */
 class RegisterHelper(private val modId: String, private val registerProviders: Map<Class<*>, RegisterProvider<*>>) {
     private val registers = mutableMapOf<Class<*>, DeferredRegister<*>>()
