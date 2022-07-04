@@ -1,5 +1,6 @@
 package io.github.elizabethlfransen.lizlib
 
+import io.github.elizabethlfransen.lizlib.register.registerHelper
 import net.minecraftforge.fml.common.Mod
 
 /**
@@ -12,4 +13,5 @@ import net.minecraftforge.fml.common.Mod
 @Mod(LizLib.ID)
 object LizLib {
     const val ID = "liz_lib"
+
 }

@@ -36,6 +36,9 @@ minecraft {
                 liz_lib {
                     source sourceSets.main
                 }
+                liz_lib_test_mod {
+                    source sourceSets.test
+                }
             }
         }
 
@@ -49,6 +52,10 @@ minecraft {
                 liz_lib {
                     source sourceSets.main
                 }
+
+                liz_lib_test_mod {
+                    source sourceSets.test
+                }
             }
         }
 
@@ -58,11 +65,15 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,LOADING,CORE'
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'liz_lib', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
+            args '--mod', 'liz_lib_test_mod', '--all', '--output', file('src/test/resources/'), '--existing', file('src/test/resources')
 
             mods {
                 liz_lib {
                     source sourceSets.main
+                }
+
+                liz_lib_test_mod {
+                    source sourceSets.test
                 }
             }
         }
@@ -75,6 +86,17 @@ sourceSets.main.resources { srcDirs 'src/generated/resources/' }
 dependencies {
     // Use the latest version of Minecraft Forge
     minecraft "net.minecraftforge:forge:$minecraftVersion-$forgeVersion"
+
+    // test dependencies
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 compileKotlin {
