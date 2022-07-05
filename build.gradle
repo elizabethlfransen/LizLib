@@ -65,7 +65,7 @@ minecraft {
             property 'forge.logging.markers', 'SCAN,LOADING,CORE'
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'liz_lib_test_mod', '--all', '--output', file('src/test/resources/'), '--existing', file('src/test/resources')
+            args '--mod', 'liz_lib_test_mod', '--all', '--output', file('src/test/generated/resources'), '--existing', file('src/test/resources')
 
             mods {
                 liz_lib {
@@ -83,6 +83,8 @@ minecraft {
 // Include assets and data from data generators
 sourceSets.main.resources { srcDirs 'src/generated/resources/' }
 
+sourceSets.test.resources { srcDirs 'src/test/generated/resources' }
+
 dependencies {
     // Use the latest version of Minecraft Forge
     minecraft "net.minecraftforge:forge:$minecraftVersion-$forgeVersion"
@@ -99,7 +101,9 @@ tasks.test {
     }
 }
 
-compileKotlin {
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+
     kotlinOptions.jvmTarget = "17"
 }
 

@@ -1,7 +1,7 @@
 package io.github.elizabethlfransen.lizlib
 
-import io.github.elizabethlfransen.lizlib.register.registerHelper
 import net.minecraftforge.fml.common.Mod
+import org.slf4j.LoggerFactory
 
 /**
  * Main mod class. Should be an `object` declaration annotated with `@Mod`.
@@ -13,5 +13,6 @@ import net.minecraftforge.fml.common.Mod
 @Mod(LizLib.ID)
 object LizLib {
     const val ID = "liz_lib"
+    val LOGGER = LoggerFactory.getLogger(ID)
 
 }
