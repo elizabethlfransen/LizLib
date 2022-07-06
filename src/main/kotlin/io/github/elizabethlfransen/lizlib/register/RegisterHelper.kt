@@ -7,8 +7,8 @@ import net.minecraftforge.registries.DeferredRegister
  * Used to quickly get registers on demand.
  * A RegisterHelper is tied to a specific mod, specified by [modId] and a supplied map for getting a register by type.
  */
-class RegisterHelper(private val modId: String, private val registerProviders: Map<Class<*>, RegisterProvider<*>>) {
-    private val registers = mutableMapOf<Class<*>, DeferredRegister<*>>()
+class RegisterHelper(private val modId: String, private val registerFactory: IDeferredRegisterFactory, private val registerProviders: Map<Class<*>, RegisterProvider<*>>) {
+    private val registers = mutableMapOf<Class<*>, IDeferredRegister<*>>()
     private val eventBuses = mutableSetOf<IEventBus>()
 
     /**
@@ -28,20 +28,20 @@ class RegisterHelper(private val modId: String, private val registerProviders: M
      * provider for [registerType], [IllegalArgumentException] is thrown.
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> resolveRegister(registerType: Class<T>): DeferredRegister<T> {
+    fun <T> resolveRegister(registerType: Class<T>): IDeferredRegister<T> {
         // if register already exists return it
         if(registers.containsKey(registerType))
-            return registers[registerType] as DeferredRegister<T>
+            return registers[registerType] as IDeferredRegister<T>
         // if no register provider exists for type throw an error
         if(!registerProviders.containsKey(registerType))
             throw IllegalArgumentException("No register provider for type \"${registerType.simpleName}\"")
         // register must be created
-        val register = registerProviders[registerType]!!(modId)
+        val register = registerProviders[registerType]!!(modId, registerFactory)
         // register to existing event busses
         eventBuses.forEach(register::register)
         // remember for later
         registers[registerType] = register
-        return register as DeferredRegister<T>
+        return register as IDeferredRegister<T>
     }
     /**
      * Resolves a register of type [T]. If the register has already used it's not recreated. If there is no
