@@ -11,6 +11,7 @@ import java.util.function.Supplier
  */
 class RegisterHelperBuilder {
     private val registerProviders = mutableMapOf<Class<*>, RegisterProvider<*>>()
+    var registerFactory: IDeferredRegisterFactory = ModDeferredRegisterFactory()
 
     /**
      * Adds [register] of type [T] to be used by helper
@@ -18,29 +19,28 @@ class RegisterHelperBuilder {
     fun <T> addRegister(type: Class<T>, register: RegisterProvider<T>) {
         registerProviders[type] = register
     }
+    fun addForgeRegister(registry: IForgeRegistry<*>) {
+        registerProviders[registry.registrySuperType] = { modId, registerFactory -> registerFactory.create(registry, modId) }
+    }
+
+    fun <T : IForgeRegistryEntry<T>> addForgeRegister(type: Class<T>, sup: Supplier<IForgeRegistry<T>>) {
+        registerProviders[type] = {
+            modId, registerFactory ->
+            registerFactory.create(sup.get(), modId)
+        }
+    }
+    /**
+     * Adds a forge register for [registry] from [ForgeRegistries].
+     * [registry] is lazily called when used by the helper.
+     */
+    inline fun <reified T : IForgeRegistryEntry<T>> addForgeRegister(sup: Supplier<IForgeRegistry<T>>)
+        = addForgeRegister(T::class.java, sup)
 
     /**
      * Add [register] of type [T] to be used by helper
      */
     inline fun <reified T> addRegister(noinline register: RegisterProvider<T>)
         = addRegister(T::class.java, register)
-
-    /**
-     * Adds a forge register for [registry] from [ForgeRegistries].
-     */
-    inline fun <reified T: IForgeRegistryEntry<T>> addForgeRegister(registry: IForgeRegistry<T>) =
-        addRegister(T::class.java) { modId ->
-            DeferredRegister.create(registry, modId)
-        }
-
-    /**
-     * Adds a forge register for [registry] from [ForgeRegistries].
-     * [registry] is lazily called when used by the helper.
-     */
-    inline fun <reified T : IForgeRegistryEntry<T>> addForgeRegister(registry: Supplier<IForgeRegistry<T>>) =
-        addRegister(T::class.java) {modId ->
-            DeferredRegister.create(registry.get(), modId)
-        }
 
 
     /**
@@ -87,6 +87,7 @@ class RegisterHelperBuilder {
     fun build(modId: String): RegisterHelper {
         return RegisterHelper(
             modId,
+            registerFactory,
             registerProviders
         )
     }
