@@ -1,12 +1,15 @@
-package io.github.elizabethlfransen.lizlib.register
+package io.github.elizabethlfransen.test.register
 
-import io.github.elizabethlfransen.lizlib.debug.TestMod
+import io.github.elizabethlfransen.lizlib.register.IDeferredRegister
+import io.github.elizabethlfransen.lizlib.register.IDeferredRegisterFactory
+import io.github.elizabethlfransen.lizlib.register.RegisterHelper
+import io.github.elizabethlfransen.lizlib.register.RegisterProvider
+import io.github.elizabethlfransen.test.debug.TestMod
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.material.Fluid
 import net.minecraftforge.eventbus.api.IEventBus
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -75,7 +78,7 @@ class RegisterHelperTests {
             val register = mock<IDeferredRegister<Item>>()
             val registerFactory = mock<IDeferredRegisterFactory>()
             val eventBus = mock<IEventBus>()
-            val registerMap = mapOf<Class<*>,RegisterProvider<*>>(
+            val registerMap = mapOf<Class<*>, RegisterProvider<*>>(
                 Item::class.java to { _, _ -> register }
             )
             val handler = RegisterHelper(
@@ -98,7 +101,7 @@ class RegisterHelperTests {
             val register = mock<IDeferredRegister<Item>>()
             val registerFactory = mock<IDeferredRegisterFactory>()
             val eventBusses = listOf(mock<IEventBus>(), mock())
-            val registerMap = mapOf<Class<*>,RegisterProvider<*>>(
+            val registerMap = mapOf<Class<*>, RegisterProvider<*>>(
                 Item::class.java to { _, _ -> register }
             )
             val handler = RegisterHelper(
@@ -122,7 +125,7 @@ class RegisterHelperTests {
             val register = mock<IDeferredRegister<Item>>()
             val registerFactory = mock<IDeferredRegisterFactory>()
             val eventBus = mock<IEventBus>()
-            val registerMap = mapOf<Class<*>,RegisterProvider<*>>(
+            val registerMap = mapOf<Class<*>, RegisterProvider<*>>(
                 Item::class.java to { _, _ -> register }
             )
             val handler = RegisterHelper(
@@ -143,7 +146,7 @@ class RegisterHelperTests {
             val registers = arrayOf(mock<IDeferredRegister<Item>>(), mock<IDeferredRegister<Block>>())
             val registerFactory = mock<IDeferredRegisterFactory>()
             val eventBus = mock<IEventBus>()
-            val registerMap = mapOf<Class<*>,RegisterProvider<*>>(
+            val registerMap = mapOf<Class<*>, RegisterProvider<*>>(
                 Item::class.java to { _, _ -> registers[0] },
                 Block::class.java to {_, _ -> registers[1] }
             )
