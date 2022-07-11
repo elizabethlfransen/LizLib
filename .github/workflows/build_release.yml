@@ -29,11 +29,6 @@ jobs:
       run: ./gradlew build
     - name: Build Jar
       run: ./gradlew jar
-    - name: Add Files to Release
-      uses: johnwbyrd/update-release@v1
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        files: "build/libs/${{ env.archivesBaseName }}-${{env.version}}-${{env.minecraftVersion}}.jar"
     - name: Publish to modrinth
       uses: Kir-Antipov/mc-publish@v3.1
       with:
