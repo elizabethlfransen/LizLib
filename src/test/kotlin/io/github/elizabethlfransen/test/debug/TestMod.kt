@@ -1,4 +1,4 @@
-package io.github.elizabethlfransen.lizlib.debug
+package io.github.elizabethlfransen.test.debug
 
 import io.github.elizabethlfransen.lizlib.datagen.DataGen
 import io.github.elizabethlfransen.lizlib.datagen.DataGen.DataGeneratorType.CLIENT
