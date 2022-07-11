@@ -1,7 +1,7 @@
 package io.github.elizabethlfransen.lizlib.register
 
 import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.registries.DeferredRegister
+import kotlin.properties.ReadOnlyProperty
 
 /**
  * Used to quickly get registers on demand.
@@ -49,4 +49,11 @@ class RegisterHelper(private val modId: String, private val registerFactory: IDe
      */
     inline fun <reified T> resolveRegister()
         = resolveRegister(T::class.java)
+
+    fun <T> registerObject(objectType: Class<T>, name: String, supplier: () -> T): ReadOnlyProperty<Any?, T>
+        = resolveRegister(objectType)
+            .registerObject(name, supplier)
+
+    inline fun <reified T> registerObject(name: String, noinline supplier: () -> T): ReadOnlyProperty<Any?, T>
+        = registerObject(T::class.java, name, supplier)
 }

@@ -3,12 +3,11 @@ package io.github.elizabethlfransen.lizlib.register
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraftforge.eventbus.api.IEventBus
-import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
 import net.minecraftforge.registries.RegistryBuilder
 import net.minecraftforge.registries.RegistryObject
-import java.util.function.Supplier
+import kotlin.properties.ReadOnlyProperty
 
 interface IDeferredRegister<T> {
 
@@ -32,7 +31,7 @@ interface IDeferredRegister<T> {
 
     val registryName: ResourceLocation?
 
-
+    fun registerObject(name: String, supplier: () -> T): ReadOnlyProperty<Any?, T>
 }
 
 inline fun <reified E : IForgeRegistryEntry<E>> IDeferredRegister<E>.makeRegistry(noinline sup: () -> RegistryBuilder<E>)
