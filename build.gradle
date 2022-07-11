@@ -17,6 +17,8 @@ apply plugin: 'kotlinx-serialization'
 
 apply from: 'https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-3.6.0.gradle'
 
+version "$modVersion-$minecraftVersion"
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
