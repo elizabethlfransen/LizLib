@@ -4,7 +4,9 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraftforge.eventbus.api.IEventBus
 import net.minecraftforge.registries.*
+import thedarkcolour.kotlinforforge.forge.registerObject
 import java.util.function.Supplier
+import kotlin.properties.ReadOnlyProperty
 
 class ModDeferredRegister<T>(val registerHandle: DeferredRegister<T>) : IDeferredRegister<T> {
     override fun <I : T> register(name: String, sup: () -> I): RegistryObject<I>
@@ -53,4 +55,7 @@ class ModDeferredRegister<T>(val registerHandle: DeferredRegister<T>) : IDeferre
         get() = registerHandle.entries
     override val registryName: ResourceLocation?
         get() = registerHandle.registryName
+
+    override fun registerObject(name: String, supplier: () -> T): ReadOnlyProperty<Any?, T>
+        = registerHandle.registerObject(name, supplier)
 }
