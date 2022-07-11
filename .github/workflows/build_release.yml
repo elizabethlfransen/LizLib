@@ -2,23 +2,42 @@ on:
   release:
     types: [ published ]
 env:
-  ORG_GRADLE_PROJECT_modVersion: "1.1.0.0"
+  archivesBaseName: LizLib
+  minecraftVersion: 1.18.2
+  modrinthId: KW9hF8i3
 jobs:
   PublishRelease:
     runs-on: ubuntu-latest
     steps:
-    - name: Echo Version
-      run: echo ${GITHUB_REF/refs\/tags\//:1}
-#    - uses: actions/checkout@v3
-#    - uses: actions/setup-java@v3
-#      with:
-#        distribution: temurin
-#        java-version: 17
-#    - name: Setup Gradle
-#      uses: gradle/gradle-build-action@v2
-#    - name: Execute Gradle Build
-#      run: ./gradlew build
-#    - name: Build Jar
-#      run: ./gradlew jar
-#    - name: Build Reobf Jar
-#      run: ./gradlew reobfJar
+    - name: Get Version
+      run: |
+        VERSION=${{github.event.release.tag_name}}
+        echo "version=${VERSION:1}" >> $GITHUB_ENV
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+    - name: Setup Gradle Env
+      run: |
+        echo "ORG_GRADLE_PROJECT_modVersion=${{env.version}}" >> $GITHUB_ENV
+        echo "ORG_GRADLE_PROJECT_archivesBaseName=${{env.archivesBaseName}}" >> $GITHUB_ENV
+        echo "ORG_GRADLE_PROJECT_minecraftVersion=${{env.minecraftVersion}}" >> $GITHUB_ENV
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+    - name: Execute Gradle Build
+      run: ./gradlew build
+    - name: Build Jar
+      run: ./gradlew jar
+    - name: Add Files to Release
+      uses: johnwbyrd/update-release@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        files: "build/libs/${{ env.archivesBaseName }}-${{env.version}}-${{env.minecraftVersion}}.jar"
+    - name: Publish to modrinth
+      uses: Kir-Antipov/mc-publish@v3.1
+      with:
+        modrinth-id: ${{ env.modrinthId }}
+        modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+        version: ${{ env.version }}-${{env.minecraftVersion}}
+        name: ${{ env.archiveBaseName }} ${{ env.version }} for ${{ env.minecraftVersion }}
