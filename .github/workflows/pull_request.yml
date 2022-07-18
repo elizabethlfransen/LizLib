@@ -12,3 +12,5 @@ jobs:
         uses: gradle/gradle-build-action@v2
       - name: Lint
         run: ./gradlew ktlintCheck
+      - name: Run tests
+        run: ./gradlew test
