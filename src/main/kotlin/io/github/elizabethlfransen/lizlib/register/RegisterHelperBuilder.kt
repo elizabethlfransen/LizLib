@@ -1,6 +1,5 @@
 package io.github.elizabethlfransen.lizlib.register
 
-import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.IForgeRegistry
 import net.minecraftforge.registries.IForgeRegistryEntry
@@ -33,15 +32,14 @@ class RegisterHelperBuilder {
      * Adds a forge register for [registry] from [ForgeRegistries].
      * [registry] is lazily called when used by the helper.
      */
-    inline fun <reified T : IForgeRegistryEntry<T>> addForgeRegister(sup: Supplier<IForgeRegistry<T>>)
-        = addForgeRegister(T::class.java, sup)
+    inline fun <reified T : IForgeRegistryEntry<T>> addForgeRegister(sup: Supplier<IForgeRegistry<T>>) =
+        addForgeRegister(T::class.java, sup)
 
     /**
      * Add [register] of type [T] to be used by helper
      */
-    inline fun <reified T> addRegister(noinline register: RegisterProvider<T>)
-        = addRegister(T::class.java, register)
-
+    inline fun <reified T> addRegister(noinline register: RegisterProvider<T>) =
+        addRegister(T::class.java, register)
 
     /**
      * Adds all registers for all forge registries defined in [ForgeRegistries]
@@ -106,8 +104,7 @@ class RegisterHelperBuilder {
  * }
  * ```
  */
-fun registerHelper(modId: String, init: RegisterHelperBuilder.() -> Unit): RegisterHelper
-{
+fun registerHelper(modId: String, init: RegisterHelperBuilder.() -> Unit): RegisterHelper {
     return RegisterHelperBuilder()
         .apply(init)
         .build(modId)
