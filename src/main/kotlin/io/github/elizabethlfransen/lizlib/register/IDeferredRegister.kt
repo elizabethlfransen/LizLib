@@ -34,5 +34,5 @@ interface IDeferredRegister<T> {
     fun registerObject(name: String, supplier: () -> T): ReadOnlyProperty<Any?, T>
 }
 
-inline fun <reified E : IForgeRegistryEntry<E>> IDeferredRegister<E>.makeRegistry(noinline sup: () -> RegistryBuilder<E>)
-    = this.makeRegistry(E::class.java, sup)
+inline fun <reified E : IForgeRegistryEntry<E>> IDeferredRegister<E>.makeRegistry(noinline sup: () -> RegistryBuilder<E>) =
+    this.makeRegistry(E::class.java, sup)

@@ -59,7 +59,6 @@ private fun registerDataGenerators(
         }
 }
 
-
 private fun createProviderProvider(type: Type): (event: GatherDataEvent) -> DataProvider {
     logger.debug("Scanning for valid constructor on ${type.className}")
     val javaClass = try {
@@ -78,7 +77,6 @@ private fun createProviderProvider(type: Type): (event: GatherDataEvent) -> Data
                 ?: throw DataGenRegistrationException("Invalid parameter type for ${type.className}: ${parameterType.simpleName}")
         }
 
-
     return { event ->
         val realizedParameters = parameters
             .map { it(event) }
@@ -88,7 +86,6 @@ private fun createProviderProvider(type: Type): (event: GatherDataEvent) -> Data
             throw DataGenRegistrationException("Unable to initialize ${type.className}", e)
         }
     }
-
 }
 
 @Suppress("UNCHECKED_CAST")

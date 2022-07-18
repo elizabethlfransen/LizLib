@@ -1,6 +1,5 @@
 package io.github.elizabethlfransen.lizlib.datagen
 
-
 class DataGenRegistrationException : Exception {
 
     constructor() : super()

@@ -14,5 +14,4 @@ import org.slf4j.LoggerFactory
 object LizLib {
     const val ID = "liz_lib"
     val LOGGER = LoggerFactory.getLogger(ID)
-
 }

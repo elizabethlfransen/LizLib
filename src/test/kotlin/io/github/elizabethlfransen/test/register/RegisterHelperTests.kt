@@ -9,7 +9,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.material.Fluid
 import net.minecraftforge.eventbus.api.IEventBus
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -92,7 +93,6 @@ class RegisterHelperTests {
 
             // assert
             verify(register).register(eventBus)
-
         }
 
         @Test
@@ -148,7 +148,7 @@ class RegisterHelperTests {
             val eventBus = mock<IEventBus>()
             val registerMap = mapOf<Class<*>, RegisterProvider<*>>(
                 Item::class.java to { _, _ -> registers[0] },
-                Block::class.java to {_, _ -> registers[1] }
+                Block::class.java to { _, _ -> registers[1] }
             )
             val handler = RegisterHelper(
                 "TestId",
@@ -161,11 +161,10 @@ class RegisterHelperTests {
             handler.register(eventBus)
 
             // assert
-            registers.forEach {register ->
+            registers.forEach { register ->
                 verify(register).register(eventBus)
             }
         }
-
     }
 
     @Nested
@@ -199,7 +198,7 @@ class RegisterHelperTests {
 
         @Test
         fun `resolving an invalid register throws an exception`() {
-            assertThatThrownBy{
+            assertThatThrownBy {
                 helper.resolveRegister<Fluid>()
             }.isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("No register provider for type \"Fluid\"")

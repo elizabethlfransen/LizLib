@@ -6,6 +6,6 @@ import net.minecraftforge.registries.IForgeRegistryEntry
 
 class ModDeferredRegisterFactory : IDeferredRegisterFactory {
     override fun <E : IForgeRegistryEntry<E>> create(registry: IForgeRegistry<E>, modId: String): IDeferredRegister<E> {
-        return ModDeferredRegister<E>(DeferredRegister.create(registry,modId))
+        return ModDeferredRegister<E>(DeferredRegister.create(registry, modId))
     }
 }
